@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
   });
 });
 
-/* POST users listing. */
+/* POST users. */
 router.post('/', function (req, res, next) {
 
   // Nuevo usuario
@@ -39,6 +39,33 @@ router.post('/', function (req, res, next) {
   });
 });
 
-module.exports = router;
+/* PUT users. */
+router.put('/:idUser', function (req, res, next) {
 
-// Prueba Commit
+  // Actualizar usuario
+  let newUser = new UserModel({
+    id: req.body.id,
+    name: req.body.name,
+    surname: req.body.surname,
+    numberDocument: req.body.numberDocument,
+    email: req.body.email,
+    mobileNumber: req.body.mobileNumber,
+    password: req.body.password,
+    city: req.body.city,
+    active: req.body.active
+  });
+
+let idUser = req.params.idUser;
+
+UserModel.findByIdAndUpdate(idUser, {id: newUser.id, name: newUser.name, surname: newUser.surname, numberDocument: newUser.numberDocument, 
+  email: newUser.email, mobileNumber: newUser.mobileNumber, password: newUser.password, city: newUser.city, active: newUser.active}, 
+  (err, newUser) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({ status: 200, message: "Usuario Actualizado", newUser: newUser });
+    }
+  });
+});
+
+module.exports = router;
